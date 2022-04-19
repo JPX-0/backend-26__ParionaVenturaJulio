@@ -13,9 +13,8 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   createdAt: { type: String },
   updatedAt: { type: String },
-  products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
   messages: [{ type: Schema.Types.ObjectId, ref: "Message" }]
 });
-UserSchema.index({ email: 1, firstname: 1 });
+UserSchema.index({ email: 1 });
 
 export default UserSchema;

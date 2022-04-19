@@ -17,14 +17,14 @@ passport.use("login", new LocalStrategy(async (userEmail, password, done) => {
   try {
     const user = await userDao.getByEmail(userEmail);
     if(!isValidPassowrd(user, password)) {
-      console.log("Invalid user or password");
+      console.error("Invalid user or password");
       return done(null, false);
     }
+    console.log("User logged in successful!");
     return done(null, user);
   }
   catch(error) {
-    console.log("Error signing up >>> ", error);
-    return done(error);
+    return done(null, false);
   }
 }));
 passport.use("register", new LocalStrategy(
@@ -43,8 +43,7 @@ passport.use("register", new LocalStrategy(
       return done(null, user);
     }
     catch(error) {
-      console.log("Error signing up >>> ", error);
-      return done(error);
+      return done(null, false);
     }
   }
 ));
@@ -52,7 +51,6 @@ passport.use("register", new LocalStrategy(
 // Serializacion:
 passport.serializeUser((user, done) => {
   console.log("Inside serializer");
-  console.log(user._id);
   done(null, user._id);
 })
 

@@ -6,7 +6,7 @@ const collection = 'Message';
 class MessagesDao extends MongoDBContainer {
   static instance;
   constructor() {
-    super(collection, MessageSchema, "User");
+    super(collection, MessageSchema);
     if (!MessagesDao.instance) {
       MessagesDao.instance = this;
       return this;
@@ -22,8 +22,19 @@ class MessagesDao extends MongoDBContainer {
       return documents;
     }
     catch(error) {
-      console.log("error", error);
       const newError = formatErrorObject(INTERNAL_ERROR.tag, error.message);
+      throw new Error(JSON.stringify(newError));
+    }
+  }
+
+  async createMessage(resourceItem) {
+    try {
+      const newItem = new this.model(resourceItem);
+      await newItem.save();
+      return newItem._id;
+    }
+    catch (err) {
+      const newError = formatErrorObject(INTERNAL_ERROR.tag, err.message);
       throw new Error(JSON.stringify(newError));
     }
   }

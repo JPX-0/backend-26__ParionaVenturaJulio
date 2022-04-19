@@ -6,7 +6,7 @@ const collection = 'Product';
 class ProductsDao extends MongoDBContainer {
   static instance;
   constructor() {
-    super(collection, ProductSchema, "User");
+    super(collection, ProductSchema);
     if (!ProductsDao.instance) {
       ProductsDao.instance = this;
       return this;

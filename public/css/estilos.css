@@ -11,6 +11,21 @@ label {
   min-height: 100vh;
 }
 
+.page-error {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+.page-error > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 50rem;
+  margin: 0 auto;
+  gap: 1rem;
+}
+
 .table td, .table th { 
   vertical-align: middle; 
 }

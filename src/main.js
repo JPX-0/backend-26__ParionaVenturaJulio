@@ -11,10 +11,6 @@ import apisRoutes from './routers/app.routers.js';
 import { Server as HttpServer } from "http";
 import { Server as Socket } from "socket.io";
 
-// import authWebRouter from "./routers/web/auth.js";
-// import homeWebRouter from "./routers/web/home.js";
-// import productsApiRouter from "./routers/api/productos-test.js";
-
 import addProductsHandlers from "./routers/ws/productos.js";
 import addMenssagesHandlers from "./routers/ws/mensajes.js";
 
@@ -46,8 +42,8 @@ app.use(session({
 	}),
   secret: [env.SESSION_SECRET],
 	resave: false,
-	saveUninitialized: false
-	// cookie: { maxAge: 120000 }
+	saveUninitialized: false,
+	cookie: { maxAge: 600000 } // se cerrará la sesion en 10mints.
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -60,15 +56,6 @@ app.set("view engine", "ejs");
 //--------------------------------------------
 // rutas del servidor API
 app.use(apisRoutes);
-
-//--------------------------------------------
-// rutas del servidor API REST
-// app.use(productsApiRouter);
-
-//--------------------------------------------
-// rutas del servidor web
-// app.use(authWebRouter);
-// app.use(homeWebRouter);
 
 //--------------------------------------------
 // inicio el servidor

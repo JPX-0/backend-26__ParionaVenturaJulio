@@ -5,9 +5,8 @@ import { STATUS } from '../../constants/api.constants.js';
 const { INTERNAL_ERROR, NOT_FOUND } = STATUS;
 
 class MongoDBContainer {
-  constructor(collection, Schema, type) {
+  constructor(collection, Schema) {
     this.model = mongoose.model(collection, Schema);
-    this.type = type;
   };
 
   async getAll(filter = {}) {
@@ -23,9 +22,7 @@ class MongoDBContainer {
 
   async getById(id) {
     try {
-      let document;
-      if(!this.type) document = await this.model.findById(id, { __v: 0 }).lean();
-      else document = await this.model.findById(id, { __v: 0 }).populate(this.type).lean();
+      const document = await this.model.findById(id, { __v: 0 }).lean();
       if (!document) {
         const errorMessage = `Resource with id ${id} does not exist in our records`;
         const newError = formatErrorObject(NOT_FOUND.tag, errorMessage);
@@ -39,7 +36,6 @@ class MongoDBContainer {
   }
 
   async createItem(resourceItem) {
-    console.log("createItem ", resourceItem);
     try {
       const newItem = new this.model(resourceItem);
       await newItem.save();

@@ -1,13 +1,15 @@
 import express from 'express';
-import { login, register } from '../../../../controllers/auth.controllers.js';
 import passport from "../../../../middlewares/passport.js";
 
-const router = express.Router();
+const authRoutes = express.Router();
 
-// router.post('/register', (req, res) => {
-//   console.log("req.body", req.body);
-// });
-router.post('/register', passport.authenticate("register", { failureRedirect: "/register-error" }), register);
-router.post('/login', passport.authenticate("login", { failureRedirect: "/login-error" }), login);
+authRoutes.post('/register', (passport.authenticate("register", { 
+  failureRedirect: "/register-error",
+  successRedirect: "/home"
+})));
+authRoutes.post('/login', passport.authenticate("login", { 
+  failureRedirect: "/login-error",
+  successRedirect: "/home"
+}));
 
-export default router;
+export default authRoutes;

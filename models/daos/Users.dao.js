@@ -15,54 +15,28 @@ class UsersDao extends MongoDBContainer {
       UsersDao.instance = this;
       return this;
     }
-    else {
-      return UsersDao.instance;
-    }
+    else return UsersDao.instance;
   }
 
   async createUser(userItem) {
     try {
-      const user = await this.createItem(userItem);
+      const user = new this.model(userItem);
       await user.save();
       return user;
     }
     catch(error) {
-      if (error.message.toLowerCase().includes('e11000') || error.message.toLowerCase().includes('duplicate')) {
-        const newError = formatErrorObject(STATUS.BAD_REQUEST, 'User with given email already exist');
-        throw new Error(JSON.stringify(newError));
-      }
       throw new Error(error);
     }
   };
 
-  async getById(id) {
-    try {
-      const document = await this.model.findById(id, { __v: 0 }).lean();
-      if (!document) {
-        const errorMessage = `Resource with id ${id} does not exist in our records`;
-        const newError = formatErrorObject(NOT_FOUND.tag, errorMessage);
-        throw new Error(JSON.stringify(newError));
-      } else {
-        return document;
-      }
-    }
-    catch(error) {
-      const newError = formatErrorObject(INTERNAL_ERROR.tag, error.message);
-      throw new Error(JSON.stringify(newError));
-    }
-  }
-
   async getByEmail(email) {
-    console.log("email", email);
     try {
       const document = await this.model.findOne({ email }, { __v: 0 });
       if (!document) {
         const errorMessage = `Wrong username or password`;
         const newError = formatErrorObject(NOT_FOUND.tag, errorMessage);
         throw new Error(JSON.stringify(newError));
-      } else {
-        return document;
-      }
+      } else return document;
     }
     catch(error) {
       const newError = formatErrorObject(INTERNAL_ERROR.tag, error.message);
